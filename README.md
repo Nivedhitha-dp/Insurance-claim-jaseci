@@ -4,6 +4,8 @@ Claims Desk reads a total-loss claim folder (PDFs, crooked scans, customer email
 key facts. It checks the documents against each other, decides whether the claim is `complete`,
 `incomplete` or `needs_review`, and talks to the customer about what's still missing.
 
+Video Recording (drive link): https://drive.google.com/file/d/1a2zqxp-GGOJwgH-wxh5o-SRqr53MC-0P/view?usp=sharing
+
 ## Contents
 
 1. [Setup](#1-setup)
