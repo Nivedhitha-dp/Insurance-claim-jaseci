@@ -656,26 +656,10 @@ an unsupported guess to finalize a claim.
 
 ## 7. What we'd do with more time
 
-**Test accuracy on more claims.** Build a larger set of manually verified claims and measure how often
-the agent extracts the correct values and assigns the correct status. This would also help determine
-whether the current confidence levels are reliable.
-
-**Handle financial discrepancies more carefully.** The current system reports settlement arithmetic
-mismatches as warnings by default. We'd distinguish explainable differences, such as a deductible
-that was not subtracted, from unexplained discrepancies that should block finalization and require
-human review.
-
-**Support unfamiliar documents.** Improve OCR for poor-quality scans and extend the fallback for
-document layouts the current extraction rules don't recognize (today the agent reads such documents
-as free text). If a value cannot be verified, the agent should continue to flag it for review rather
-than guess.
-
-**Make human review easier.** The UI already lists each issue with its best guess and shows document
-previews. The next step is to show conflicting values side by side with the exact place they appear
-in each source document, explain why the claim needs attention, and let the reviewer confirm or
-correct the value. Store reviewer corrections so recurring errors can be identified and used to
-improve future evaluations.
-
-**Prepare for production use.** Replace JSON-based claim state with a database, add structured
-logging and safe retries, and implement authentication, access controls, and appropriate
-data-retention policies before processing real customer information.
+1. Evaluate the LLMs systematically. I would test different models on the same set of claims and compare extraction accuracy, tool-calling reliability, final claim decisions, latency, and cost. I would also measure how often the agent misses a document or needs the fallback planner. This would help me choose the primary model based on evidence rather than a manually configured fallback order.
+2. Compare OCR and PDF-processing approaches. I would evaluate RapidOCR against alternatives such as PaddleOCR and Tesseract, and compare different PDF extraction approaches for text-based and scanned documents. I would measure field-level accuracy for VINs, dates, and monetary amounts, along with processing time. I would also test whether enhanced preprocessing actually improves results on difficult scans.
+3. Improve the evaluation dataset and regression tests. I would create a larger, labeled set of claims covering clean documents, poor scans, missing documents, conflicting values, duplicates, and misleading customer emails. Every code or prompt change would be tested against this dataset to ensure it fixes problems without breaking previously working claims.
+4. Strengthen validation and customer-facing responses. I would make the system generate numerical statements directly from structured validation results rather than letting the LLM paraphrase them. For example, the CLM-004 run showed that the customer-facing message reported an incorrect VIN length. I would add tests to prevent these inconsistencies and ensure customer messages never promise actions the system has not taken.
+5. Improve document classification and extraction. I would strengthen handling of less common documents, such as tow receipts and adjuster notes, and make sure every relevant document is processed before a claim can be finalized. I would also improve quote verification so extracted values and customer intent are traceable to the source.
+6. Improve human-in-the-loop review. I would build a clearer review workflow for ambiguous VINs, conflicting dates, missing documents, and uncertain OCR results. The agent should explain why a claim needs review, show the supporting evidence, and let a human confirm or correct the result before finalization.
+7. Test reliability and performance at scale. I would test larger batches of claims, provider failures, rate limits, malformed tool calls, and interrupted runs. I would also measure how often claims are incorrectly marked complete, since preventing false finalization is more important than simply maximizing the number of claims processed automatically.
