@@ -1,0 +1,16 @@
+{
+  "_comment": "Hand-labelled by reading every document. Values after all customer replies are processed.",
+  "CLM-001": {"status": "complete", "vin": "1HGCM82633A004352", "date_of_loss": "2026-02-14",
+              "insurance_payout": "18750.00", "loan_balance": "22340.55", "missing": []},
+  "CLM-002": {"status": "incomplete", "vin": "3FADP4BJ7EM207685", "date_of_loss": "2026-01-28",
+              "insurance_payout": "12400.00", "loan_balance": "15890.20", "missing": ["police_report"]},
+  "CLM-003": {"status": "needs_review", "vin": "2T1BURHE5JC034127", "date_of_loss": "2026-03-05",
+              "insurance_payout": "23800.00", "loan_balance": "27650.00", "missing": [],
+              "superseded": ["settlement_breakdown.pdf"], "conflict_fields": ["vin"]},
+  "CLM-004": {"status": "needs_review", "vin": "5YJ3E1EA7K", "date_of_loss": "2025-12-19",
+              "insurance_payout": null, "loan_balance": "19200.00", "missing": [],
+              "invalid_fields": ["vin"], "pending_fields": ["insurance_payout"]},
+  "CLM-005": {"status": "needs_review", "vin": "1N4AL3AP8JC231504", "date_of_loss": "2026-03-22",
+              "insurance_payout": "31500.00", "loan_balance": "35120.75", "missing": ["finance_agreement"],
+              "conflict_fields": ["date_of_loss"]}
+}

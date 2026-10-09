@@ -1,0 +1,419 @@
+{
+  "claim_id": "CLM-004",
+  "status": "needs_review",
+  "status_reason": "VIN fails validation: 5YJ3E1EA7K",
+  "extracted_fields": {
+    "vin": {
+      "value": "5YJ3E1EA7K",
+      "confidence": "low",
+      "source": "finance_agreement.png",
+      "reason": "length is 10, expected 17 - identical in all 3 documents, so the source documents themselves are wrong, not the OCR",
+      "corroborated_by": [
+        "police_report.png",
+        "settlement_breakdown.png"
+      ]
+    },
+    "date_of_loss": {
+      "value": "2025-12-19",
+      "confidence": "high",
+      "source": "police_report.png",
+      "reason": null,
+      "corroborated_by": [
+        "settlement_breakdown.png"
+      ]
+    },
+    "insurance_payout": {
+      "value": null,
+      "confidence": "low",
+      "source": "settlement_breakdown.png",
+      "reason": "document shows \"TBD -pending\" - not numeric: value is pending / not yet determined",
+      "corroborated_by": []
+    },
+    "loan_balance": {
+      "value": "19200.00",
+      "confidence": "high",
+      "source": "finance_agreement.png",
+      "reason": null,
+      "corroborated_by": [
+        "settlement_breakdown.png"
+      ]
+    }
+  },
+  "documents": {
+    "identified": [
+      {
+        "file": "finance_agreement.png",
+        "type": "finance_agreement",
+        "read_via": "ocr",
+        "ocr_confidence": 0.97,
+        "status": "active"
+      },
+      {
+        "file": "police_report.png",
+        "type": "police_report",
+        "read_via": "ocr",
+        "ocr_confidence": 0.97,
+        "status": "active"
+      },
+      {
+        "file": "settlement_breakdown.png",
+        "type": "settlement_breakdown",
+        "read_via": "ocr",
+        "ocr_confidence": 0.972,
+        "status": "active"
+      },
+      {
+        "file": "tow_receipt.png",
+        "type": "unknown",
+        "read_via": "ocr",
+        "ocr_confidence": 0.951,
+        "status": "active"
+      }
+    ],
+    "missing": [],
+    "duplicates": [],
+    "superseded": []
+  },
+  "issues": [
+    {
+      "type": "invalid",
+      "severity": "blocking",
+      "field": "vin",
+      "description": "VIN fails validation: 5YJ3E1EA7K",
+      "details": "length is 10, expected 17 - identical in all 3 documents, so the source documents themselves are wrong, not the OCR",
+      "resolvable_by": "customer_or_internal"
+    },
+    {
+      "type": "missing",
+      "severity": "blocking",
+      "field": "insurance_payout",
+      "description": "insurance payout not yet determined",
+      "details": "settlement_breakdown.png: \"TBD -pending\"",
+      "resolvable_by": "internal"
+    }
+  ],
+  "cross_document_checks": {
+    "vehicle": {
+      "status": "consistent",
+      "value": "2022 Tesla Model 3",
+      "sources": [
+        "finance_agreement.png",
+        "police_report.png",
+        "settlement_breakdown.png",
+        "tow_receipt.png"
+      ]
+    },
+    "lender": {
+      "status": "consistent",
+      "value": "Wells Fargo Auto",
+      "sources": [
+        "finance_agreement.png",
+        "settlement_breakdown.png"
+      ]
+    },
+    "person_name": {
+      "status": "consistent",
+      "value": "Marcus Thompson",
+      "sources": [
+        "finance_agreement.png",
+        "police_report.png",
+        "settlement_breakdown.png",
+        "tow_receipt.png"
+      ]
+    },
+    "policy_number": {
+      "status": "consistent",
+      "value": "AUT-3347821",
+      "sources": [
+        "police_report.png",
+        "settlement_breakdown.png",
+        "tow_receipt.png"
+      ]
+    },
+    "police_report_number": {
+      "status": "consistent",
+      "value": "YPD-2025-02871",
+      "sources": [
+        "police_report.png",
+        "tow_receipt.png"
+      ]
+    }
+  },
+  "next_action": {
+    "type": "escalate",
+    "message": "Dear Marcus Thompson, thank you for submitting your documents for claim AUT-3347821. We have received your finance agreement, police report, settlement breakdown, and tow receipt.\n\nUpon review, we noticed that the Vehicle Identification Number (VIN) listed on your documents (5YJ3E1EA7K) is incomplete, as it is only 9 characters long. A valid VIN must be 17 characters. Please provide the full 17-character VIN for your 2022 Tesla Model 3 so we can proceed with your claim.\n\nAdditionally, we are currently awaiting the final insurance payout amount, which is still being determined. We will notify you once this information is available.\n\nIf you have any questions, please let us know.\n\nClaims Team",
+    "internal_note": "The VIN provided in all documents is only 9 characters long (5YJ3E1EA7K). This is a blocking issue. The insurance payout is currently 'TBD' in the settlement breakdown. Escalating for review of the VIN discrepancy.",
+    "follow_ups": [
+      "Verify the full 17-character VIN with the customer.",
+      "Wait for the final insurance payout determination."
+    ]
+  },
+  "conversation": [
+    {
+      "turn": 0,
+      "kind": "initial_review",
+      "status_after_turn": "needs_review",
+      "action": "escalate",
+      "message_to_customer": "Dear Marcus Thompson, thank you for submitting your documents for claim AUT-3347821. We have received your finance agreement, police report, settlement breakdown, and tow receipt.\n\nUpon review, we noticed that the Vehicle Identification Number (VIN) listed on your documents (5YJ3E1EA7K) is incomplete, as it is only 9 characters long. A valid VIN must be 17 characters. Please provide the full 17-character VIN for your 2022 Tesla Model 3 so we can proceed with your claim.\n\nAdditionally, we are currently awaiting the final insurance payout amount, which is still being determined. We will notify you once this information is available.\n\nIf you have any questions, please let us know.\n\nClaims Team",
+      "agent_summary": "Inventory and reading complete. All documents are consistent, but the VIN is incomplete (9 characters) across all sources. Insurance payout is currently pending. Claim status is 'needs_review'. Escalating to the team.",
+      "driven_by": "llm:gemini/gemini-3.1-flash-lite (after failover from gemini/gemini-3.5-flash; gemini/gemini-3.8-flash; gemini/gemini-3.7-flash; gemini/gemini-3.6-flash)"
+    }
+  ],
+  "tools_used": [
+    {
+      "turn": 0,
+      "tool": "list_documents",
+      "input": {},
+      "result": "4 files; exact duplicate groups: []"
+    },
+    {
+      "turn": 0,
+      "tool": "read_document",
+      "input": {
+        "file": "finance_agreement.png"
+      },
+      "result": {
+        "method": "ocr",
+        "ocr_conf": 0.97,
+        "skew_corrected": 0.43,
+        "suggested_type": "finance_agreement"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "read_document",
+      "input": {
+        "file": "police_report.png"
+      },
+      "result": {
+        "method": "ocr",
+        "ocr_conf": 0.97,
+        "skew_corrected": 0.78,
+        "suggested_type": "police_report"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "read_document",
+      "input": {
+        "file": "settlement_breakdown.png"
+      },
+      "result": {
+        "method": "ocr",
+        "ocr_conf": 0.972,
+        "skew_corrected": 0.0,
+        "suggested_type": "settlement_breakdown"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "read_document",
+      "input": {
+        "file": "tow_receipt.png"
+      },
+      "result": {
+        "method": "ocr",
+        "ocr_conf": 0.951,
+        "skew_corrected": -1.09,
+        "suggested_type": "tow_receipt"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "extract_fields",
+      "input": {
+        "file": "finance_agreement.png",
+        "doc_type": "finance_agreement"
+      },
+      "result": {
+        "doc_type": "finance_agreement",
+        "fields": {
+          "vin": "5YJ3E1EA7K",
+          "loan_balance": "19200.00"
+        }
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "extract_fields",
+      "input": {
+        "file": "police_report.png",
+        "doc_type": "police_report"
+      },
+      "result": {
+        "doc_type": "police_report",
+        "fields": {
+          "vin": "5YJ3E1EA7K",
+          "date_of_loss": "2025-12-19"
+        }
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "extract_fields",
+      "input": {
+        "doc_type": "settlement_breakdown",
+        "file": "settlement_breakdown.png"
+      },
+      "result": {
+        "doc_type": "settlement_breakdown",
+        "fields": {
+          "vin": "5YJ3E1EA7K",
+          "date_of_loss": "2025-12-19",
+          "insurance_payout": "TBD - pending",
+          "loan_balance": "19200.00"
+        }
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "vision_read",
+      "input": {
+        "file": "finance_agreement.png",
+        "question": "What is the full 17-character VIN? It appears to be cut off or misread."
+      },
+      "result": {
+        "file": "finance_agreement.png",
+        "answer": "[groq/qwen/qwen3.8-27b] The VIN field on the document contains the following text:\n\n**5YJ3E1EA7K**\n\nThis is **9 characters** long, not 17. A standard VIN is 17 characters.\n\nThere are no visible strikethroughs or replacements in the VIN field. The text appears clear and legible \u2014 no ambiguous characters (like 2/Z, 5/S, 0/O) are present in this specific string.\n\nHowever, since the question asks for the \u201cfull 17-character VIN\u201d and notes it \u201cappears to be cut off or misread,\u201d we must conclude:\n\n> **The full 17-character VIN is not provided in the document. Only a 9-character fragment, \u201c5YJ3E1EA7K,\u201d is visible under the VIN field. It is likely truncated or incorrectly entered. No replacement or correction is shown.**\n\nAdditionally, note that \u201c5YJ3E1EA7K\u201d does not conform to standard VIN structure (which includes check digit, model year, plant code, etc.), further suggesting it is incomplete or erroneous.\n\n---\n\n\u2705 Final Answer:  \n**The document shows only \u201c5YJ3E1EA7K\u201d (9 characters) under VIN. The full 17-character VIN is not present \u2014 it appears truncated or misentered. No corrections or strikethroughs are visible.**",
+        "note": "treat as a single, medium-reliability reading; corroborate with other documents"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "flag_concern",
+      "input": {
+        "description": "The VIN provided in all documents (5YJ3E1EA7K) is only 9 characters long and does not meet the 17-character requirement.",
+        "code": "incomplete_vin",
+        "quote": "5YJ3E1EA7K",
+        "severity": "warning",
+        "file": "finance_agreement.png"
+      },
+      "result": {
+        "recorded": false,
+        "reason": "vin problems are reported by reconcile / evaluate_claim",
+        "reconcile": {
+          "field": "vin",
+          "value": "5YJ3E1EA7K",
+          "confidence": "low",
+          "reason": "length is 10, expected 17 - identical in all 3 documents, so the source documents themselves are wrong, not the OCR",
+          "conflict": false,
+          "groups": [],
+          "sources": [
+            "finance_agreement.png",
+            "police_report.png",
+            "settlement_breakdown.png"
+          ]
+        }
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "reconcile",
+      "input": {
+        "field": "vin"
+      },
+      "result": {
+        "value": "5YJ3E1EA7K",
+        "confidence": "low"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "reconcile",
+      "input": {
+        "field": "date_of_loss"
+      },
+      "result": {
+        "value": "2025-12-19",
+        "confidence": "high"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "reconcile",
+      "input": {
+        "field": "loan_balance"
+      },
+      "result": {
+        "value": "19200.00",
+        "confidence": "high"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "cross_check_documents",
+      "input": {},
+      "result": {
+        "vehicle": "consistent",
+        "lender": "consistent",
+        "person_name": "consistent",
+        "policy_number": "consistent",
+        "police_report_number": "consistent"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "evaluate_claim",
+      "input": {},
+      "result": {
+        "status": "needs_review",
+        "blocking": 2
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "submit_turn",
+      "input": {
+        "follow_ups": [
+          "Verify the full 17-character VIN with the customer.",
+          "Wait for the final insurance payout determination."
+        ],
+        "summary": "Inventory and reading complete. All documents are consistent, but the VIN is incomplete (9 characters) across all sources. Insurance payout is currently pending. Claim status is 'needs_review'. Escalating to the team.",
+        "customer_message": "Dear Marcus Thompson, thank you for submitting your documents for claim AUT-3347821. We have received your finance agreement, police report, settlement breakdown, and tow receipt.\n\nUpon review, we noticed that the Vehicle Identification Number (VIN) listed on your documents (5YJ3E1EA7K) is incomplete, as it is only 9 characters long. A valid VIN must be 17 characters. Please provide the full 17-character VIN for your 2022 Tesla Model 3 so we can proceed with your claim.\n\nAdditionally, we are currently awaiting the final insurance payout amount, which is still being determined. We will notify you once this information is available.\n\nIf you have any questions, please let us know.\n\nClaims Team",
+        "internal_note": "The VIN provided in all documents is only 9 characters long (5YJ3E1EA7K). This is a blocking issue. The insurance payout is currently 'TBD' in the settlement breakdown. Escalating for review of the VIN discrepancy.",
+        "action": "escalate"
+      },
+      "result": "error: submit rejected: not every document was processed: ['tow_receipt.png'] - read them and call extract_fields (or compare_documents if they may be duplicates/revisions)"
+    },
+    {
+      "turn": 0,
+      "tool": "extract_fields",
+      "input": {
+        "file": "tow_receipt.png",
+        "doc_type": "unknown",
+        "type_reason": "tow receipt is not a required document type for the claim, but it was provided."
+      },
+      "result": {
+        "doc_type": "unknown",
+        "fields": {}
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "evaluate_claim",
+      "input": {},
+      "result": {
+        "status": "needs_review",
+        "blocking": 2
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "submit_turn",
+      "input": {
+        "action": "escalate",
+        "internal_note": "The VIN provided in all documents is only 9 characters long (5YJ3E1EA7K). This is a blocking issue. The insurance payout is currently 'TBD' in the settlement breakdown. Escalating for review of the VIN discrepancy.",
+        "follow_ups": [
+          "Verify the full 17-character VIN with the customer.",
+          "Wait for the final insurance payout determination."
+        ],
+        "summary": "Inventory and reading complete. All documents are consistent, but the VIN is incomplete (9 characters) across all sources. Insurance payout is currently pending. Claim status is 'needs_review'. Escalating to the team.",
+        "customer_message": "Dear Marcus Thompson, thank you for submitting your documents for claim AUT-3347821. We have received your finance agreement, police report, settlement breakdown, and tow receipt.\n\nUpon review, we noticed that the Vehicle Identification Number (VIN) listed on your documents (5YJ3E1EA7K) is incomplete, as it is only 9 characters long. A valid VIN must be 17 characters. Please provide the full 17-character VIN for your 2022 Tesla Model 3 so we can proceed with your claim.\n\nAdditionally, we are currently awaiting the final insurance payout amount, which is still being determined. We will notify you once this information is available.\n\nIf you have any questions, please let us know.\n\nClaims Team"
+      },
+      "result": {
+        "accepted": true,
+        "status": "needs_review"
+      }
+    }
+  ]
+}

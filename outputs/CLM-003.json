@@ -1,0 +1,422 @@
+{
+  "claim_id": "CLM-003",
+  "status": "needs_review",
+  "status_reason": "VIN disagrees across sources",
+  "extracted_fields": {
+    "vin": {
+      "value": "2T1BURHE5JC034127",
+      "confidence": "low",
+      "source": "police_report.png",
+      "reason": "CONFLICT. Best guess 2T1BURHE5JC034127 (supported by police_report.png, settlement_breakdown_v2.pdf, weight 4.7) vs 2T1BURHE5JC034182 <- finance_agreement.pdf (weight 3.0). Values differ only at position(s) [16, 17] - consistent with a transcription error.",
+      "corroborated_by": [
+        "settlement_breakdown_v2.pdf"
+      ]
+    },
+    "date_of_loss": {
+      "value": "2026-03-05",
+      "confidence": "high",
+      "source": "police_report.png",
+      "reason": null,
+      "corroborated_by": [
+        "settlement_breakdown_v2.pdf"
+      ]
+    },
+    "insurance_payout": {
+      "value": "23800.00",
+      "confidence": "high",
+      "source": "settlement_breakdown_v2.pdf",
+      "reason": null,
+      "corroborated_by": []
+    },
+    "loan_balance": {
+      "value": "27650.00",
+      "confidence": "high",
+      "source": "finance_agreement.pdf",
+      "reason": null,
+      "corroborated_by": [
+        "settlement_breakdown_v2.pdf"
+      ]
+    }
+  },
+  "documents": {
+    "identified": [
+      {
+        "file": "finance_agreement.pdf",
+        "type": "finance_agreement",
+        "read_via": "pdf_text",
+        "status": "active"
+      },
+      {
+        "file": "police_report.png",
+        "type": "police_report",
+        "read_via": "ocr",
+        "ocr_confidence": 0.977,
+        "status": "active"
+      },
+      {
+        "file": "settlement_breakdown.pdf",
+        "type": "settlement_breakdown",
+        "read_via": "pdf_text",
+        "status": "superseded"
+      },
+      {
+        "file": "settlement_breakdown_v2.pdf",
+        "type": "settlement_breakdown",
+        "read_via": "pdf_text",
+        "status": "active"
+      }
+    ],
+    "missing": [],
+    "duplicates": [],
+    "superseded": [
+      {
+        "file": "settlement_breakdown.pdf",
+        "superseded_by": "settlement_breakdown_v2.pdf",
+        "reason": "settlement_breakdown_v2.pdf carries a revision notice superseding it"
+      }
+    ]
+  },
+  "issues": [
+    {
+      "type": "inconsistency",
+      "severity": "blocking",
+      "field": "vin",
+      "description": "VIN disagrees across sources",
+      "details": "police_report.png, settlement_breakdown_v2.pdf: 2T1BURHE5JC034127; finance_agreement.pdf: 2T1BURHE5JC034182 | Values differ only at position(s) [16, 17] - consistent with a transcription error.",
+      "suggested_value": "2T1BURHE5JC034127",
+      "resolvable_by": "customer_or_internal"
+    },
+    {
+      "type": "warning",
+      "severity": "warning",
+      "field": null,
+      "description": "Settlement arithmetic does not add up in settlement_breakdown_v2.pdf: net = ACV - deductible - prior -> expected 23300.00, stated 23800.00 (the deductible appears not to have been subtracted)",
+      "details": "settlement_breakdown_v2.pdf",
+      "resolvable_by": "internal"
+    }
+  ],
+  "cross_document_checks": {
+    "vehicle": {
+      "status": "consistent",
+      "value": "2021 Toyota Corolla LE",
+      "sources": [
+        "finance_agreement.pdf",
+        "police_report.png",
+        "settlement_breakdown_v2.pdf"
+      ]
+    },
+    "lender": {
+      "status": "consistent",
+      "value": "Chase Auto",
+      "sources": [
+        "finance_agreement.pdf",
+        "settlement_breakdown_v2.pdf"
+      ]
+    },
+    "person_name": {
+      "status": "consistent",
+      "value": "Priya Raghavan",
+      "sources": [
+        "finance_agreement.pdf",
+        "police_report.png",
+        "settlement_breakdown_v2.pdf"
+      ]
+    },
+    "policy_number": {
+      "status": "consistent",
+      "value": "AUT-9910234",
+      "sources": [
+        "police_report.png",
+        "settlement_breakdown_v2.pdf"
+      ]
+    },
+    "police_report_number": {
+      "status": "single_source",
+      "value": "DPB-2026-00298",
+      "sources": [
+        "police_report.png"
+      ]
+    }
+  },
+  "next_action": {
+    "type": "escalate",
+    "message": "Thank you for submitting your documents for claim CLM-003. We are currently reviewing your file. \n\nWe noticed a discrepancy in the vehicle identification number (VIN) provided in your documents. The VIN on your finance agreement differs from the one on your police report and settlement breakdown. Could you please confirm the correct 17-character VIN for your 2021 Toyota Corolla? \n\nOnce we have this confirmation, our team will be able to proceed with the next steps of your claim. Please let us know if you have any questions.\n\nClaims Team",
+    "internal_note": "Escalating due to VIN conflict between finance agreement (ending 82) and police report/settlement (ending 27). Also noted settlement math error (deductible not subtracted) for internal review.",
+    "follow_ups": []
+  },
+  "conversation": [
+    {
+      "turn": 0,
+      "kind": "initial_review",
+      "status_after_turn": "needs_review",
+      "action": "escalate",
+      "message_to_customer": "Thank you for submitting your documents for claim CLM-003. We are currently reviewing your file. \n\nWe noticed a discrepancy in the vehicle identification number (VIN) provided in your documents. The VIN on your finance agreement differs from the one on your police report and settlement breakdown. Could you please confirm the correct 17-character VIN for your 2021 Toyota Corolla? \n\nOnce we have this confirmation, our team will be able to proceed with the next steps of your claim. Please let us know if you have any questions.\n\nClaims Team",
+      "agent_summary": "I have inventoried and reviewed the documents. The VIN is inconsistent across sources. I am escalating the claim and asking the customer to confirm the correct VIN.",
+      "driven_by": "llm:gemini/gemini-3.1-flash-lite (after failover from gemini/gemini-3.5-flash; gemini/gemini-3.8-flash; gemini/gemini-3.7-flash; gemini/gemini-3.6-flash)"
+    }
+  ],
+  "tools_used": [
+    {
+      "turn": 0,
+      "tool": "list_documents",
+      "input": {},
+      "result": "4 files; exact duplicate groups: []"
+    },
+    {
+      "turn": 0,
+      "tool": "read_document",
+      "input": {
+        "file": "finance_agreement.pdf"
+      },
+      "result": {
+        "method": "pdf_text",
+        "ocr_conf": null,
+        "skew_corrected": null,
+        "suggested_type": "finance_agreement"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "read_document",
+      "input": {
+        "file": "police_report.png"
+      },
+      "result": {
+        "method": "ocr",
+        "ocr_conf": 0.977,
+        "skew_corrected": -1.17,
+        "suggested_type": "police_report"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "read_document",
+      "input": {
+        "file": "settlement_breakdown.pdf"
+      },
+      "result": {
+        "method": "pdf_text",
+        "ocr_conf": null,
+        "skew_corrected": null,
+        "suggested_type": "settlement_breakdown"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "read_document",
+      "input": {
+        "file": "settlement_breakdown_v2.pdf"
+      },
+      "result": {
+        "method": "pdf_text",
+        "ocr_conf": null,
+        "skew_corrected": null,
+        "suggested_type": "settlement_breakdown"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "extract_fields",
+      "input": {
+        "file": "finance_agreement.pdf",
+        "doc_type": "finance_agreement"
+      },
+      "result": {
+        "doc_type": "finance_agreement",
+        "fields": {
+          "vin": "2T1BURHE5JC034182",
+          "loan_balance": "27650.00"
+        }
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "extract_fields",
+      "input": {
+        "file": "police_report.png",
+        "doc_type": "police_report"
+      },
+      "result": {
+        "doc_type": "police_report",
+        "fields": {
+          "vin": "2T1BURHE5JC034127",
+          "date_of_loss": "2026-03-05"
+        }
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "extract_fields",
+      "input": {
+        "doc_type": "settlement_breakdown",
+        "file": "settlement_breakdown.pdf"
+      },
+      "result": {
+        "doc_type": "settlement_breakdown",
+        "fields": {
+          "vin": "2T1BURHE5JC034127",
+          "date_of_loss": "2026-03-05",
+          "insurance_payout": "24100.00",
+          "loan_balance": "27650.00"
+        }
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "extract_fields",
+      "input": {
+        "file": "settlement_breakdown_v2.pdf",
+        "doc_type": "settlement_breakdown"
+      },
+      "result": {
+        "doc_type": "settlement_breakdown",
+        "fields": {
+          "vin": "2T1BURHE5JC034127",
+          "date_of_loss": "2026-03-05",
+          "insurance_payout": "23800.00",
+          "loan_balance": "27650.00"
+        }
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "compare_documents",
+      "input": {
+        "file_a": "settlement_breakdown.pdf",
+        "file_b": "settlement_breakdown_v2.pdf"
+      },
+      "result": {
+        "relation": "revision",
+        "current": "settlement_breakdown_v2.pdf",
+        "superseded": "settlement_breakdown.pdf",
+        "text_similarity": 0.909,
+        "changed_fields": {
+          "insurance_payout": {
+            "old": "24100.00",
+            "new": "23800.00"
+          }
+        }
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "reconcile",
+      "input": {
+        "field": "vin"
+      },
+      "result": {
+        "conflict": true,
+        "best_guess": "2T1BURHE5JC034127",
+        "groups": [
+          {
+            "value": "2T1BURHE5JC034127",
+            "score": 4.7,
+            "sources": [
+              "police_report.png",
+              "settlement_breakdown_v2.pdf"
+            ]
+          },
+          {
+            "value": "2T1BURHE5JC034182",
+            "score": 3.0,
+            "sources": [
+              "finance_agreement.pdf"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "reconcile",
+      "input": {
+        "field": "date_of_loss"
+      },
+      "result": {
+        "value": "2026-03-05",
+        "confidence": "high"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "reconcile",
+      "input": {
+        "field": "insurance_payout"
+      },
+      "result": {
+        "value": "23800.00",
+        "confidence": "high"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "reconcile",
+      "input": {
+        "field": "loan_balance"
+      },
+      "result": {
+        "value": "27650.00",
+        "confidence": "high"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "check_settlement_math",
+      "input": {
+        "file": "settlement_breakdown_v2.pdf"
+      },
+      "result": {
+        "ok": false,
+        "checks": [
+          "net = ACV - deductible - prior: MISMATCH",
+          "gap = loan - net: ok"
+        ]
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "cross_check_documents",
+      "input": {},
+      "result": {
+        "vehicle": "consistent",
+        "lender": "consistent",
+        "person_name": "consistent",
+        "policy_number": "consistent",
+        "police_report_number": "single_source"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "evaluate_claim",
+      "input": {},
+      "result": {
+        "status": "needs_review",
+        "blocking": 1
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "submit_turn",
+      "input": {
+        "action": "escalate",
+        "summary": "I have inventoried and reviewed the documents. The VIN is inconsistent across sources (finance agreement vs. police report/settlement). The settlement breakdown arithmetic also appears incorrect as the deductible was not subtracted. The claim is escalated for review.",
+        "internal_note": "The VIN in the finance agreement (ending in 82) conflicts with the VIN in the police report and settlement breakdown (ending in 27). Please verify the correct VIN for the vehicle. Additionally, the settlement breakdown arithmetic is off; the deductible does not appear to have been subtracted from the ACV."
+      },
+      "result": "error: submit rejected: there are customer-fixable issues - include a customer_message asking for them"
+    },
+    {
+      "turn": 0,
+      "tool": "submit_turn",
+      "input": {
+        "customer_message": "Thank you for submitting your documents for claim CLM-003. We are currently reviewing your file. \n\nWe noticed a discrepancy in the vehicle identification number (VIN) provided in your documents. The VIN on your finance agreement differs from the one on your police report and settlement breakdown. Could you please confirm the correct 17-character VIN for your 2021 Toyota Corolla? \n\nOnce we have this confirmation, our team will be able to proceed with the next steps of your claim. Please let us know if you have any questions.\n\nClaims Team",
+        "internal_note": "Escalating due to VIN conflict between finance agreement (ending 82) and police report/settlement (ending 27). Also noted settlement math error (deductible not subtracted) for internal review.",
+        "summary": "I have inventoried and reviewed the documents. The VIN is inconsistent across sources. I am escalating the claim and asking the customer to confirm the correct VIN.",
+        "action": "escalate"
+      },
+      "result": {
+        "accepted": true,
+        "status": "needs_review"
+      }
+    }
+  ]
+}

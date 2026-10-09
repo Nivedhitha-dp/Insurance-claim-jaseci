@@ -1,0 +1,475 @@
+{
+  "claim_id": "CLM-005",
+  "status": "needs_review",
+  "status_reason": "date of loss disagrees across sources",
+  "extracted_fields": {
+    "vin": {
+      "value": "1N4AL3AP8JC231504",
+      "confidence": "high",
+      "source": "police_report.png",
+      "reason": null,
+      "corroborated_by": [
+        "settlement_breakdown.pdf"
+      ]
+    },
+    "date_of_loss": {
+      "value": "2026-03-22",
+      "confidence": "low",
+      "source": "police_report.png",
+      "reason": "CONFLICT. Best guess 2026-03-22 (supported by police_report.png, weight 3.6) vs 2026-03-28 <- settlement_breakdown.pdf (weight 2.0). settlement_breakdown.pdf lists a date of loss identical to its own 'Date Prepared' (2026-03-28) - likely a clerical error copying the preparation date.",
+      "corroborated_by": []
+    },
+    "insurance_payout": {
+      "value": "31500.00",
+      "confidence": "high",
+      "source": "settlement_breakdown.pdf",
+      "reason": null,
+      "corroborated_by": []
+    },
+    "loan_balance": {
+      "value": "35120.75",
+      "confidence": "medium",
+      "source": "settlement_breakdown.pdf",
+      "reason": "the finance agreement (authoritative source) is not on file; customer's statement agrees (approximately)",
+      "corroborated_by": [
+        "customer_reply.txt"
+      ]
+    }
+  },
+  "documents": {
+    "identified": [
+      {
+        "file": "police_report.png",
+        "type": "police_report",
+        "read_via": "ocr",
+        "ocr_confidence": 0.978,
+        "status": "active"
+      },
+      {
+        "file": "settlement_breakdown.pdf",
+        "type": "settlement_breakdown",
+        "read_via": "pdf_text",
+        "status": "active"
+      },
+      {
+        "file": "customer_reply.txt",
+        "type": "customer_correspondence",
+        "read_via": "plain_text",
+        "received_in_turn": 1,
+        "status": "active"
+      }
+    ],
+    "missing": [
+      "finance_agreement"
+    ],
+    "duplicates": [],
+    "superseded": []
+  },
+  "issues": [
+    {
+      "type": "missing",
+      "severity": "blocking",
+      "field": null,
+      "description": "Required document missing: finance agreement",
+      "details": null,
+      "resolvable_by": "customer_or_internal"
+    },
+    {
+      "type": "inconsistency",
+      "severity": "blocking",
+      "field": "date_of_loss",
+      "description": "date of loss disagrees across sources",
+      "details": "police_report.png: 2026-03-22; settlement_breakdown.pdf: 2026-03-28 | settlement_breakdown.pdf lists a date of loss identical to its own 'Date Prepared' (2026-03-28) - likely a clerical error copying the preparation date.",
+      "suggested_value": "2026-03-22",
+      "resolvable_by": "internal"
+    },
+    {
+      "type": "warning",
+      "severity": "warning",
+      "field": null,
+      "description": "Settlement arithmetic does not add up in settlement_breakdown.pdf: net = ACV - deductible - prior -> expected 31000.00, stated 31500.00 (the deductible appears not to have been subtracted)",
+      "details": "settlement_breakdown.pdf",
+      "resolvable_by": "internal"
+    }
+  ],
+  "cross_document_checks": {
+    "vehicle": {
+      "status": "consistent",
+      "value": "2023 Nissan Altima SV",
+      "sources": [
+        "police_report.png",
+        "settlement_breakdown.pdf"
+      ]
+    },
+    "lender": {
+      "status": "consistent",
+      "value": "Bank of America Auto",
+      "sources": [
+        "settlement_breakdown.pdf",
+        "customer_reply.txt"
+      ]
+    },
+    "person_name": {
+      "status": "consistent",
+      "value": "Elena Vasquez",
+      "sources": [
+        "police_report.png",
+        "settlement_breakdown.pdf"
+      ]
+    },
+    "policy_number": {
+      "status": "consistent",
+      "value": "AUT-6678102",
+      "sources": [
+        "police_report.png",
+        "settlement_breakdown.pdf",
+        "customer_reply.txt"
+      ]
+    },
+    "police_report_number": {
+      "status": "single_source",
+      "value": "LPD2026=00531",
+      "sources": [
+        "police_report.png"
+      ]
+    }
+  },
+  "next_action": {
+    "type": "escalate",
+    "message": "Dear Elena Vasquez, thank you for your message regarding claim AUT-6678102. We have noted your information about the date of loss and your authorization to contact your lender. \n\nRegarding the finance agreement, since you are unable to provide a copy, please contact Bank of America Auto directly to request a formal 'payoff statement' or 'loan balance letter' as of the date of loss (March 22, 2026). This document is required to finalize your claim and can typically be requested through your online banking portal or by calling their customer service department. Once you receive this, please forward it to us. \n\nWe are currently reviewing the details of your claim and will contact you if we require any further information. Thank you for your cooperation. Claims Team.",
+    "internal_note": "Claim remains in 'needs_review' due to date of loss conflict and missing finance agreement. Customer cannot provide finance agreement; instructed to obtain a payoff statement from lender. Settlement math error identified (deductible not subtracted). Escalating for human review of date of loss and settlement calculation.",
+    "follow_ups": [
+      "Review date of loss discrepancy (Police report vs Settlement breakdown)",
+      "Review settlement math error (deductible not subtracted)",
+      "Wait for customer to provide payoff statement from lender as substitute for finance agreement"
+    ]
+  },
+  "conversation": [
+    {
+      "turn": 0,
+      "kind": "initial_review",
+      "status_after_turn": "needs_review",
+      "action": "escalate",
+      "message_to_customer": "Dear Elena Vasquez, thank you for submitting your documents for claim AUT-6678102. We have received your police report and settlement breakdown. To proceed with your claim, we still require a copy of your finance agreement. Please provide this document at your earliest convenience. We will contact you if we need any further information. Thank you for your patience. Claims Team.",
+      "agent_summary": "Initial review completed. Police report and settlement breakdown received. Finance agreement is missing. Date of loss conflict identified (03/22/2026 vs 03/28/2026). Settlement math in settlement_breakdown.pdf is inconsistent. Claim escalated.",
+      "driven_by": "llm:gemini/gemini-3.1-flash-lite (after failover from gemini/gemini-3.5-flash; gemini/gemini-3.8-flash; gemini/gemini-3.7-flash; gemini/gemini-3.6-flash)"
+    },
+    {
+      "turn": 1,
+      "kind": "customer_message",
+      "inbound": "From: elena.v.vasquez@outlook.com\nTo: claims@example-insurance.com\nDate: April 2, 2026 3:47 PM\nSubject: RE: Claim AUT-6678102 - additional information needed\n\nHello,\n\nThank you for reaching out. I understand you need my finance agreement\nbut I can't find my copy anywhere. I think it might have been in the\nglove box when the car was towed.\n\nHere's the information I do have from my last statement:\n- Lender: Bank of America Auto\n- Account #: 8841-5567-2203\n- Monthly payment: $487.33\n- I believe the balance is around $35,000, maybe a little more\n\nI'm also confused about the date you have for the accident. My accident\nwas on March 22nd, not March 28th. I'm sure because it was my daughter's\nbirthday and we were on the way to pick up her cake. Can you please\ncorrect that?\n\nIs there a way you can contact Bank of America directly to get the\npayoff amount? I can authorize that if needed.\n\nBest regards,\nElena Vasquez\n(248) 555-0831\n",
+      "status_after_turn": "needs_review",
+      "action": "escalate",
+      "message_to_customer": "Dear Elena Vasquez, thank you for your message regarding claim AUT-6678102. We have noted your information about the date of loss and your authorization to contact your lender. \n\nRegarding the finance agreement, since you are unable to provide a copy, please contact Bank of America Auto directly to request a formal 'payoff statement' or 'loan balance letter' as of the date of loss (March 22, 2026). This document is required to finalize your claim and can typically be requested through your online banking portal or by calling their customer service department. Once you receive this, please forward it to us. \n\nWe are currently reviewing the details of your claim and will contact you if we require any further information. Thank you for your cooperation. Claims Team.",
+      "agent_summary": "Customer provided loan details and confirmed they cannot provide the finance agreement. Reconciled date of loss (best guess 2026-03-22) and loan balance. Identified settlement math error (deductible not subtracted). Escalating for review.",
+      "driven_by": "llm:gemini/gemini-3.1-flash-lite (after failover from gemini/gemini-3.5-flash; gemini/gemini-3.8-flash; gemini/gemini-3.7-flash; gemini/gemini-3.6-flash)"
+    }
+  ],
+  "tools_used": [
+    {
+      "turn": 0,
+      "tool": "list_documents",
+      "input": {},
+      "result": "2 files; exact duplicate groups: []"
+    },
+    {
+      "turn": 0,
+      "tool": "read_document",
+      "input": {
+        "file": "police_report.png"
+      },
+      "result": {
+        "method": "ocr",
+        "ocr_conf": 0.978,
+        "skew_corrected": 0.36,
+        "suggested_type": "police_report"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "read_document",
+      "input": {
+        "file": "settlement_breakdown.pdf"
+      },
+      "result": {
+        "method": "pdf_text",
+        "ocr_conf": null,
+        "skew_corrected": null,
+        "suggested_type": "settlement_breakdown"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "extract_fields",
+      "input": {
+        "doc_type": "police_report",
+        "type_reason": "Official police report document.",
+        "file": "police_report.png"
+      },
+      "result": {
+        "doc_type": "police_report",
+        "fields": {
+          "vin": "1N4AL3AP8JC231504",
+          "date_of_loss": "2026-03-22"
+        }
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "extract_fields",
+      "input": {
+        "type_reason": "Insurance settlement breakdown document.",
+        "doc_type": "settlement_breakdown",
+        "file": "settlement_breakdown.pdf"
+      },
+      "result": {
+        "doc_type": "settlement_breakdown",
+        "fields": {
+          "vin": "1N4AL3AP8JC231504",
+          "date_of_loss": "2026-03-28",
+          "insurance_payout": "31500.00",
+          "loan_balance": "35120.75"
+        }
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "check_settlement_math",
+      "input": {
+        "file": "settlement_breakdown.pdf"
+      },
+      "result": {
+        "ok": false,
+        "checks": [
+          "net = ACV - deductible - prior: MISMATCH",
+          "gap = loan - net: ok"
+        ]
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "reconcile",
+      "input": {
+        "field": "date_of_loss"
+      },
+      "result": {
+        "conflict": true,
+        "best_guess": "2026-03-22",
+        "groups": [
+          {
+            "value": "2026-03-22",
+            "score": 3.6,
+            "sources": [
+              "police_report.png"
+            ]
+          },
+          {
+            "value": "2026-03-28",
+            "score": 2.0,
+            "sources": [
+              "settlement_breakdown.pdf"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "cross_check_documents",
+      "input": {},
+      "result": {
+        "vehicle": "consistent",
+        "lender": "single_source",
+        "person_name": "consistent",
+        "policy_number": "consistent",
+        "police_report_number": "single_source"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "evaluate_claim",
+      "input": {},
+      "result": {
+        "status": "needs_review",
+        "blocking": 2
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "submit_turn",
+      "input": {
+        "customer_message": "Dear Elena Vasquez, thank you for submitting your documents for claim AUT-6678102. We have received your police report and settlement breakdown. To proceed with your claim, we still require a copy of your finance agreement. Please provide this document at your earliest convenience. Our team is currently reviewing the information provided, including a discrepancy in the date of loss and the settlement calculations. We will contact you if we need any further information. Thank you for your patience. Claims Team.",
+        "summary": "Initial review completed. Police report and settlement breakdown received. Finance agreement is missing. Date of loss conflict identified (03/22/2026 vs 03/28/2026). Settlement math in settlement_breakdown.pdf is inconsistent. Claim escalated.",
+        "action": "escalate",
+        "follow_ups": [
+          "Obtain finance agreement from customer.",
+          "Review date of loss discrepancy (03/22/2026 vs 03/28/2026).",
+          "Review settlement math discrepancy in settlement_breakdown.pdf."
+        ],
+        "internal_note": "Claim is in 'needs_review' due to date of loss conflict and missing finance agreement. Settlement math in settlement_breakdown.pdf is also flagged (deductible not subtracted). Escalating for human review."
+      },
+      "result": "error: submit rejected: customer_message reveals internal review details ('settlement calculation') - keep those in internal_note"
+    },
+    {
+      "turn": 0,
+      "tool": "submit_turn",
+      "input": {
+        "customer_message": "Dear Elena Vasquez, thank you for submitting your documents for claim AUT-6678102. We have received your police report and settlement breakdown. To proceed with your claim, we still require a copy of your finance agreement. Please provide this document at your earliest convenience. We will contact you if we need any further information. Thank you for your patience. Claims Team.",
+        "follow_ups": [
+          "Obtain finance agreement from customer.",
+          "Review date of loss discrepancy (03/22/2026 vs 03/28/2026).",
+          "Review settlement math discrepancy in settlement_breakdown.pdf."
+        ],
+        "action": "escalate",
+        "summary": "Initial review completed. Police report and settlement breakdown received. Finance agreement is missing. Date of loss conflict identified (03/22/2026 vs 03/28/2026). Settlement math in settlement_breakdown.pdf is inconsistent. Claim escalated.",
+        "internal_note": "Claim is in 'needs_review' due to date of loss conflict and missing finance agreement. Settlement math in settlement_breakdown.pdf is also flagged (deductible not subtracted). Escalating for human review."
+      },
+      "result": {
+        "accepted": true,
+        "status": "needs_review"
+      }
+    },
+    {
+      "turn": 1,
+      "tool": "list_documents",
+      "input": {},
+      "result": "3 files; exact duplicate groups: []"
+    },
+    {
+      "turn": 1,
+      "tool": "read_document",
+      "input": {
+        "file": "customer_reply.txt"
+      },
+      "result": {
+        "method": "plain_text",
+        "ocr_conf": null,
+        "skew_corrected": null,
+        "suggested_type": "customer_correspondence"
+      }
+    },
+    {
+      "turn": 1,
+      "tool": "record_observation",
+      "input": {
+        "value": "35000.00",
+        "quote": "I believe the balance is around $35,000, maybe a little more",
+        "file": "customer_reply.txt",
+        "approximate": true,
+        "field": "loan_balance"
+      },
+      "result": {
+        "recorded": true,
+        "method": "customer_statement",
+        "normalized": "35000.00",
+        "valid": true,
+        "note": null,
+        "quote_match": 1.0
+      }
+    },
+    {
+      "turn": 1,
+      "tool": "note_customer_intent",
+      "input": {
+        "kind": "document_unavailable",
+        "text": "Customer cannot find finance agreement, believes it was in the towed vehicle."
+      },
+      "result": {
+        "recorded": true
+      }
+    },
+    {
+      "turn": 1,
+      "tool": "note_customer_intent",
+      "input": {
+        "text": "Customer authorizes contacting Bank of America for payoff amount.",
+        "kind": "authorization"
+      },
+      "result": {
+        "recorded": true
+      }
+    },
+    {
+      "turn": 1,
+      "tool": "reconcile",
+      "input": {
+        "field": "date_of_loss"
+      },
+      "result": {
+        "conflict": true,
+        "best_guess": "2026-03-22",
+        "groups": [
+          {
+            "value": "2026-03-22",
+            "score": 3.6,
+            "sources": [
+              "police_report.png"
+            ]
+          },
+          {
+            "value": "2026-03-28",
+            "score": 2.0,
+            "sources": [
+              "settlement_breakdown.pdf"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "turn": 1,
+      "tool": "reconcile",
+      "input": {
+        "field": "loan_balance"
+      },
+      "result": {
+        "value": "35120.75",
+        "confidence": "medium"
+      }
+    },
+    {
+      "turn": 1,
+      "tool": "evaluate_claim",
+      "input": {},
+      "result": {
+        "status": "needs_review",
+        "blocking": 2
+      }
+    },
+    {
+      "turn": 1,
+      "tool": "submit_turn",
+      "input": {
+        "action": "escalate",
+        "internal_note": "Claim remains in 'needs_review' due to date of loss conflict and missing finance agreement. Customer cannot provide finance agreement; instructed to obtain a payoff statement from lender. Settlement math error identified (deductible not subtracted). Escalating for human review of date of loss and settlement calculation.",
+        "follow_ups": [
+          "Review date of loss discrepancy (Police report vs Settlement breakdown)",
+          "Review settlement math error (deductible not subtracted)",
+          "Wait for customer to provide payoff statement from lender as substitute for finance agreement"
+        ],
+        "customer_message": "Dear Elena Vasquez, thank you for your message regarding claim AUT-6678102. We have noted your information about the date of loss and your authorization to contact your lender. \n\nRegarding the finance agreement, since you are unable to provide a copy, please contact Bank of America Auto directly to request a formal 'payoff statement' or 'loan balance letter' as of the date of loss (March 22, 2026). This document is required to finalize your claim and can typically be requested through your online banking portal or by calling their customer service department. Once you receive this, please forward it to us. \n\nOur team is currently reviewing the discrepancy in the date of loss and the settlement calculations. We will contact you if we require any further information. Thank you for your cooperation. Claims Team.",
+        "summary": "Customer provided loan details and confirmed they cannot provide the finance agreement. Reconciled date of loss (best guess 2026-03-22) and loan balance. Identified settlement math error (deductible not subtracted). Escalating for review."
+      },
+      "result": "error: submit rejected: customer_message reveals internal review details ('settlement calculation') - keep those in internal_note"
+    },
+    {
+      "turn": 1,
+      "tool": "submit_turn",
+      "input": {
+        "action": "escalate",
+        "follow_ups": [
+          "Review date of loss discrepancy (Police report vs Settlement breakdown)",
+          "Review settlement math error (deductible not subtracted)",
+          "Wait for customer to provide payoff statement from lender as substitute for finance agreement"
+        ],
+        "summary": "Customer provided loan details and confirmed they cannot provide the finance agreement. Reconciled date of loss (best guess 2026-03-22) and loan balance. Identified settlement math error (deductible not subtracted). Escalating for review.",
+        "customer_message": "Dear Elena Vasquez, thank you for your message regarding claim AUT-6678102. We have noted your information about the date of loss and your authorization to contact your lender. \n\nRegarding the finance agreement, since you are unable to provide a copy, please contact Bank of America Auto directly to request a formal 'payoff statement' or 'loan balance letter' as of the date of loss (March 22, 2026). This document is required to finalize your claim and can typically be requested through your online banking portal or by calling their customer service department. Once you receive this, please forward it to us. \n\nWe are currently reviewing the details of your claim and will contact you if we require any further information. Thank you for your cooperation. Claims Team.",
+        "internal_note": "Claim remains in 'needs_review' due to date of loss conflict and missing finance agreement. Customer cannot provide finance agreement; instructed to obtain a payoff statement from lender. Settlement math error identified (deductible not subtracted). Escalating for human review of date of loss and settlement calculation."
+      },
+      "result": {
+        "accepted": true,
+        "status": "needs_review"
+      }
+    }
+  ]
+}

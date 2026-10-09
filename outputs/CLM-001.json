@@ -1,0 +1,393 @@
+{
+  "claim_id": "CLM-001",
+  "status": "complete",
+  "status_reason": "all required documents present; all four fields valid and consistent",
+  "extracted_fields": {
+    "vin": {
+      "value": "1HGCM82633A004352",
+      "confidence": "high",
+      "source": "police_report.pdf",
+      "reason": null,
+      "corroborated_by": [
+        "adjuster_note.png",
+        "finance_agreement.png",
+        "settlement_breakdown.pdf"
+      ]
+    },
+    "date_of_loss": {
+      "value": "2026-02-14",
+      "confidence": "high",
+      "source": "police_report.pdf",
+      "reason": null,
+      "corroborated_by": [
+        "settlement_breakdown.pdf"
+      ]
+    },
+    "insurance_payout": {
+      "value": "18750.00",
+      "confidence": "high",
+      "source": "settlement_breakdown.pdf",
+      "reason": null,
+      "corroborated_by": []
+    },
+    "loan_balance": {
+      "value": "22340.55",
+      "confidence": "high",
+      "source": "finance_agreement.png",
+      "reason": null,
+      "corroborated_by": [
+        "settlement_breakdown.pdf"
+      ]
+    }
+  },
+  "documents": {
+    "identified": [
+      {
+        "file": "adjuster_note.png",
+        "type": "adjuster_note (supplementary - handwritten field notes)",
+        "read_via": "ocr",
+        "ocr_confidence": 0.944,
+        "status": "active"
+      },
+      {
+        "file": "finance_agreement.png",
+        "type": "finance_agreement",
+        "read_via": "ocr",
+        "ocr_confidence": 0.976,
+        "status": "active"
+      },
+      {
+        "file": "police_report.pdf",
+        "type": "police_report",
+        "read_via": "pdf_text",
+        "status": "active"
+      },
+      {
+        "file": "settlement_breakdown.pdf",
+        "type": "settlement_breakdown",
+        "read_via": "pdf_text",
+        "status": "active"
+      }
+    ],
+    "missing": [],
+    "duplicates": [],
+    "superseded": []
+  },
+  "issues": [
+    {
+      "type": "warning",
+      "severity": "warning",
+      "field": null,
+      "description": "Settlement arithmetic does not add up in settlement_breakdown.pdf: net = ACV - deductible - prior -> expected 18250.00, stated 18750.00 (the deductible appears not to have been subtracted)",
+      "details": "settlement_breakdown.pdf",
+      "resolvable_by": "internal"
+    },
+    {
+      "type": "warning",
+      "severity": "warning",
+      "field": null,
+      "description": "Adjuster noted rust on rear quarter panel and suggested checking if prior damage adjustment is needed.",
+      "details": "adjuster_note.png: \"Noticed somerust onrearquarterpanel,probably pre-existing.Need to checkif priordamage adineeded.\"",
+      "resolvable_by": "internal"
+    },
+    {
+      "type": "warning",
+      "severity": "info",
+      "field": "vehicle",
+      "description": "Vehicle (year / make / model): near-identical readings, likely an OCR/handwriting misread",
+      "details": "finance_agreement.png, police_report.pdf, settlement_breakdown.pdf: 2020 Honda Accord EX-L; adjuster_note.png: 2020HondaAccordEX-C. Not treated as a contradiction; best guess '2020 Honda Accord EX-L' (supported by finance_agreement.png, police_report.pdf, settlement_breakdown.pdf).",
+      "suggested_value": "2020 Honda Accord EX-L",
+      "resolvable_by": "internal"
+    }
+  ],
+  "cross_document_checks": {
+    "vehicle": {
+      "status": "ocr_variant",
+      "value": "2020 Honda Accord EX-L",
+      "clusters": [
+        {
+          "value": "2020 Honda Accord EX-L",
+          "sources": [
+            "finance_agreement.png",
+            "police_report.pdf",
+            "settlement_breakdown.pdf"
+          ]
+        },
+        {
+          "value": "2020HondaAccordEX-C",
+          "sources": [
+            "adjuster_note.png"
+          ]
+        }
+      ]
+    },
+    "lender": {
+      "status": "consistent",
+      "value": "Capital One Auto Finance",
+      "sources": [
+        "finance_agreement.png",
+        "settlement_breakdown.pdf"
+      ]
+    },
+    "person_name": {
+      "status": "consistent",
+      "value": "Sarah Mitchell",
+      "sources": [
+        "finance_agreement.png",
+        "police_report.pdf",
+        "settlement_breakdown.pdf"
+      ]
+    },
+    "policy_number": {
+      "status": "consistent",
+      "value": "AUT-7829301",
+      "sources": [
+        "adjuster_note.png",
+        "police_report.pdf",
+        "settlement_breakdown.pdf"
+      ]
+    },
+    "police_report_number": {
+      "status": "single_source",
+      "value": "AA-2026-00437",
+      "sources": [
+        "police_report.pdf"
+      ]
+    }
+  },
+  "next_action": {
+    "type": "finalize",
+    "message": null,
+    "internal_note": "Claim is complete. Flagged issues: 1) Settlement arithmetic discrepancy (deductible omission) in settlement_breakdown.pdf. 2) Adjuster note regarding potential prior damage (rust on rear quarter panel). Escalating to the settlement team for review before final payout.",
+    "follow_ups": []
+  },
+  "conversation": [
+    {
+      "turn": 0,
+      "kind": "initial_review",
+      "status_after_turn": "complete",
+      "action": "finalize",
+      "message_to_customer": null,
+      "agent_summary": "All required documents (police report, finance agreement, settlement breakdown) were received and verified. Fields are consistent across documents. Adjuster note regarding potential prior damage and a settlement arithmetic discrepancy have been flagged for internal review. Claim is ready for finalization.",
+      "driven_by": "llm:gemini/gemini-3.1-flash-lite (after failover from gemini/gemini-3.5-flash; gemini/gemini-3.8-flash; gemini/gemini-3.7-flash; gemini/gemini-3.6-flash)"
+    }
+  ],
+  "tools_used": [
+    {
+      "turn": 0,
+      "tool": "list_documents",
+      "input": {},
+      "result": "4 files; exact duplicate groups: []"
+    },
+    {
+      "turn": 0,
+      "tool": "read_document",
+      "input": {
+        "file": "adjuster_note.png"
+      },
+      "result": {
+        "method": "ocr",
+        "ocr_conf": 0.944,
+        "skew_corrected": 0.3,
+        "suggested_type": "adjuster_note"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "read_document",
+      "input": {
+        "file": "finance_agreement.png"
+      },
+      "result": {
+        "method": "ocr",
+        "ocr_conf": 0.976,
+        "skew_corrected": 1.45,
+        "suggested_type": "finance_agreement"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "read_document",
+      "input": {
+        "file": "police_report.pdf"
+      },
+      "result": {
+        "method": "pdf_text",
+        "ocr_conf": null,
+        "skew_corrected": null,
+        "suggested_type": "police_report"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "read_document",
+      "input": {
+        "file": "settlement_breakdown.pdf"
+      },
+      "result": {
+        "method": "pdf_text",
+        "ocr_conf": null,
+        "skew_corrected": null,
+        "suggested_type": "settlement_breakdown"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "extract_fields",
+      "input": {
+        "doc_type": "police_report",
+        "file": "police_report.pdf"
+      },
+      "result": {
+        "doc_type": "police_report",
+        "fields": {
+          "vin": "1HGCM82633A004352",
+          "date_of_loss": "2026-02-14"
+        }
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "extract_fields",
+      "input": {
+        "doc_type": "finance_agreement",
+        "file": "finance_agreement.png"
+      },
+      "result": {
+        "doc_type": "finance_agreement",
+        "fields": {
+          "vin": "1HGCM82633A004352",
+          "loan_balance": "22340.55"
+        }
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "extract_fields",
+      "input": {
+        "file": "settlement_breakdown.pdf",
+        "doc_type": "settlement_breakdown"
+      },
+      "result": {
+        "doc_type": "settlement_breakdown",
+        "fields": {
+          "vin": "1HGCM82633A004352",
+          "date_of_loss": "2026-02-14",
+          "insurance_payout": "18750.00",
+          "loan_balance": "22340.55"
+        }
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "check_settlement_math",
+      "input": {
+        "file": "settlement_breakdown.pdf"
+      },
+      "result": {
+        "ok": false,
+        "checks": [
+          "net = ACV - deductible - prior: MISMATCH",
+          "gap = loan - net: ok"
+        ]
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "cross_check_documents",
+      "input": {},
+      "result": {
+        "vehicle": "ocr_variant",
+        "lender": "consistent",
+        "person_name": "consistent",
+        "policy_number": "consistent",
+        "police_report_number": "single_source"
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "evaluate_claim",
+      "input": {},
+      "result": {
+        "status": "complete",
+        "blocking": 0
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "submit_turn",
+      "input": {
+        "internal_note": "Claim is complete. Note: Settlement arithmetic in settlement_breakdown.pdf shows a discrepancy (expected 18250.00, stated 18750.00). The deductible appears to have been omitted from the calculation. Escalating to the settlement team for review before final payout.",
+        "action": "finalize",
+        "summary": "All required documents (police report, finance agreement, settlement breakdown) were received and verified. Fields are consistent across documents. A minor arithmetic discrepancy was noted in the settlement breakdown (deductible omission), which will be flagged for internal review. Claim is ready for finalization."
+      },
+      "result": "error: submit rejected: not every document was processed: ['adjuster_note.png'] - read them and call extract_fields (or compare_documents if they may be duplicates/revisions)"
+    },
+    {
+      "turn": 0,
+      "tool": "extract_fields",
+      "input": {
+        "doc_type": "adjuster_note",
+        "file": "adjuster_note.png"
+      },
+      "result": {
+        "doc_type": "adjuster_note",
+        "fields": {}
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "record_observation",
+      "input": {
+        "value": "1HGCM82633A004352",
+        "file": "adjuster_note.png",
+        "field": "vin",
+        "quote": "VINFromdoorjamb:1HGCM82633A004352"
+      },
+      "result": {
+        "recorded": true,
+        "method": "llm_observation",
+        "normalized": "1HGCM82633A004352",
+        "valid": true,
+        "note": null,
+        "quote_match": 1.0
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "flag_concern",
+      "input": {
+        "quote": "Noticed somerust onrearquarterpanel,probably pre-existing.Need to checkif priordamage adineeded.",
+        "description": "Adjuster noted rust on rear quarter panel and suggested checking if prior damage adjustment is needed.",
+        "file": "adjuster_note.png",
+        "severity": "warning",
+        "code": "possible_prior_damage"
+      },
+      "result": {
+        "recorded": true
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "evaluate_claim",
+      "input": {},
+      "result": {
+        "status": "complete",
+        "blocking": 0
+      }
+    },
+    {
+      "turn": 0,
+      "tool": "submit_turn",
+      "input": {
+        "internal_note": "Claim is complete. Flagged issues: 1) Settlement arithmetic discrepancy (deductible omission) in settlement_breakdown.pdf. 2) Adjuster note regarding potential prior damage (rust on rear quarter panel). Escalating to the settlement team for review before final payout.",
+        "action": "finalize",
+        "summary": "All required documents (police report, finance agreement, settlement breakdown) were received and verified. Fields are consistent across documents. Adjuster note regarding potential prior damage and a settlement arithmetic discrepancy have been flagged for internal review. Claim is ready for finalization."
+      },
+      "result": {
+        "accepted": true,
+        "status": "complete"
+      }
+    }
+  ]
+}

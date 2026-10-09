@@ -1,0 +1,121 @@
+{
+  "processing_order": [
+    {
+      "rank": 1,
+      "claim_id": "CLM-001",
+      "status": "complete",
+      "tier": 1,
+      "blocking_issues": 0,
+      "decision_confidence": {
+        "score": 83,
+        "label": "medium",
+        "summary": "4/4 fields high-confidence, 3/4 corroborated by 2+ documents, 2 warning(s), 1 note(s)",
+        "breakdown": {
+          "field_evidence": 60,
+          "corroboration": 15,
+          "cleanliness": 8
+        }
+      },
+      "reason": "All required documents present; every field valid and consistent - ready to finalize. Do a quick sanity check of 2 non-blocking warning(s) first: Settlement arithmetic does not add up in settlement_breakdown.pdf; Adjuster noted rust on rear quarter panel and suggested checking if prior damage adjustment is needed.. Decision confidence 83/100 (medium): 4/4 fields high-confidence, 3/4 corroborated by 2+ documents, 2 warning(s), 1 note(s). Loss was 236 days ago."
+    },
+    {
+      "rank": 2,
+      "claim_id": "CLM-003",
+      "status": "needs_review",
+      "tier": 2,
+      "blocking_issues": 1,
+      "decision_confidence": {
+        "score": 78,
+        "label": "medium",
+        "summary": "3/4 fields high-confidence, 3/4 corroborated by 2+ documents, 1 warning(s)",
+        "breakdown": {
+          "field_evidence": 48,
+          "corroboration": 15,
+          "cleanliness": 15
+        }
+      },
+      "reason": "Everything is on file; one internal decision away from final: VIN disagrees across sources (best guess 2T1BURHE5JC034127). A single verification call (e.g. to the lender) unblocks it. Decision confidence 78/100 (medium): 3/4 fields high-confidence, 3/4 corroborated by 2+ documents, 1 warning(s). Loss was 217 days ago."
+    },
+    {
+      "rank": 3,
+      "claim_id": "CLM-002",
+      "status": "incomplete",
+      "tier": 3,
+      "blocking_issues": 1,
+      "decision_confidence": {
+        "score": 73,
+        "label": "medium",
+        "summary": "2/4 fields high-confidence, 2/4 corroborated by 2+ documents, 1 warning(s)",
+        "breakdown": {
+          "field_evidence": 48,
+          "corroboration": 10,
+          "cleanliness": 15
+        }
+      },
+      "reason": "Data present is clean and consistent; blocked only on police_report which the customer has and promised (next weekend). Can also be requested directly from the police department to save time. Decision confidence 73/100 (medium): 2/4 fields high-confidence, 2/4 corroborated by 2+ documents, 1 warning(s). Loss was 253 days ago."
+    },
+    {
+      "rank": 4,
+      "claim_id": "CLM-005",
+      "status": "needs_review",
+      "tier": 4,
+      "blocking_issues": 2,
+      "decision_confidence": {
+        "score": 62,
+        "label": "medium",
+        "summary": "2/4 fields high-confidence, 1/4 corroborated by 2+ documents, 1 warning(s)",
+        "breakdown": {
+          "field_evidence": 42,
+          "corroboration": 5,
+          "cleanliness": 15
+        }
+      },
+      "reason": "Needs a reviewer decision (date of loss disagrees across sources) and a document the customer could not provide (finance_agreement). Decision confidence 62/100 (medium): 2/4 fields high-confidence, 1/4 corroborated by 2+ documents, 1 warning(s). Loss was 200 days ago."
+    },
+    {
+      "rank": 5,
+      "claim_id": "CLM-004",
+      "status": "needs_review",
+      "tier": 5,
+      "blocking_issues": 2,
+      "decision_confidence": {
+        "score": 68,
+        "label": "medium",
+        "summary": "2/4 fields high-confidence, 3/4 corroborated by 2+ documents",
+        "breakdown": {
+          "field_evidence": 33,
+          "corroboration": 15,
+          "cleanliness": 20
+        }
+      },
+      "reason": "Furthest from finalization: insurance payout not yet determined; VIN fails validation: 5YJ3E1EA7K. Needs internal valuation plus corrected source data. Decision confidence 68/100 (medium): 2/4 fields high-confidence, 3/4 corroborated by 2+ documents. Loss was 293 days ago."
+    }
+  ],
+  "do_in_parallel_today": [
+    {
+      "claim_id": "CLM-003",
+      "action": "send customer message now (they are the bottleneck)"
+    },
+    {
+      "claim_id": "CLM-002",
+      "action": "send customer message now (they are the bottleneck)"
+    },
+    {
+      "claim_id": "CLM-005",
+      "action": "send customer message now (they are the bottleneck)"
+    },
+    {
+      "claim_id": "CLM-005",
+      "action": "escalate: loss is 200 days old and still blocked"
+    },
+    {
+      "claim_id": "CLM-004",
+      "action": "send customer message now (they are the bottleneck)"
+    },
+    {
+      "claim_id": "CLM-004",
+      "action": "escalate: loss is 293 days old and still blocked"
+    }
+  ],
+  "method": "Rank by distance-to-trustworthy-payout (tiers), then fewer blockers, then higher decision confidence (field confidence, corroboration across documents, open warnings), then oldest loss. Customer-facing requests go out immediately regardless of rank, since the customer is the slowest dependency."
+}
